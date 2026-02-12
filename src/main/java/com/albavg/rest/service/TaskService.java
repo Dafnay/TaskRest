@@ -1,6 +1,6 @@
 package com.albavg.rest.service;
 
-import com.albavg.rest.dto.NewTaskCommand;
+import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.error.TaskNotFoundException;
 import com.albavg.rest.model.Task;
 import com.albavg.rest.repos.TaskRepository;
@@ -28,7 +28,7 @@ public class TaskService {
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
-    public Task save(NewTaskCommand cmd){
+    public Task save(EditTaskCommand cmd){
         return taskRepository.save(
                 Task.builder()
                         .title(cmd.title())
@@ -36,5 +36,21 @@ public class TaskService {
                         .deadline(cmd.deadline())
                         .build()
         );
+    }
+
+    public Task edit(EditTaskCommand cmd, Long id){
+        return taskRepository.findById(id)
+                .map(t -> {
+                    t.setTitle(cmd.title());
+                    t.setDescription(cmd.description());
+                    t.setDeadline(cmd.deadline());
+                    return taskRepository.save(t);
+                })
+                .orElseThrow(() -> new TaskNotFoundException(id));
+    }
+
+    public void delete(Long id){
+        taskRepository.deleteById(id);
+
     }
 }

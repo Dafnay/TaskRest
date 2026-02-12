@@ -1,6 +1,6 @@
 package com.albavg.rest.controller;
 
-import com.albavg.rest.dto.NewTaskCommand;
+import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.model.Task;
 import com.albavg.rest.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,22 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<Task> create(
-            @RequestBody NewTaskCommand cmd
+            @RequestBody EditTaskCommand cmd
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(taskService.save(cmd));
+    }
+
+    @PutMapping("/{id}")
+    public Task edit( @RequestBody EditTaskCommand cmd,
+                      @PathVariable Long id){
+        return taskService.edit(cmd, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        taskService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
