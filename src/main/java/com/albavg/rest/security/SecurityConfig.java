@@ -34,6 +34,7 @@ public class SecurityConfig {
                     excep.authenticationEntryPoint(authenticationEntryPoint);
                 })
                 .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
