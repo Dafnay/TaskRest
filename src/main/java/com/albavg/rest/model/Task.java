@@ -1,10 +1,8 @@
 package com.albavg.rest.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import com.albavg.rest.users.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -31,4 +29,7 @@ public class Task {
     private String description;
 
     private LocalDateTime deadline;
+
+    @ManyToOne
+    private User author;
 }

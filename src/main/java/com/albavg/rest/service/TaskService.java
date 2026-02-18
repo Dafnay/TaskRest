@@ -4,6 +4,7 @@ import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.error.TaskNotFoundException;
 import com.albavg.rest.model.Task;
 import com.albavg.rest.repos.TaskRepository;
+import com.albavg.rest.users.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +24,27 @@ public class TaskService {
         return result;
     }
 
+    public List<Task> findByAuthor(User author){
+        List<Task> result = taskRepository.findByAuthor(author);
+
+        if(result.isEmpty())
+            throw new TaskNotFoundException();
+        return result;
+    }
+
+
     public Task findById(Long id){
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
-    public Task save(EditTaskCommand cmd){
+    public Task save(EditTaskCommand cmd, User author){
         return taskRepository.save(
                 Task.builder()
                         .title(cmd.title())
                         .description(cmd.description())
                         .deadline(cmd.deadline())
+                        .author(author)
                         .build()
         );
     }
