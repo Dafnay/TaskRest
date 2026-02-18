@@ -6,6 +6,7 @@ import com.albavg.rest.service.TaskService;
 import com.albavg.rest.users.User;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequestMapping("/task/")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "basicAuth")
+@Tag(name = "Tareas", description = "Endpoints de gestion de tareas")
 public class TaskController {
 
         private final TaskService taskService;
