@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +34,12 @@ public class Task {
 
     @ManyToOne
     private User author;
+
+    @ManyToOne
+    private Category category;
+
+    @ManyToMany
+    @Builder.Default
+    private List<Tag> tags = new ArrayList<>();
+
 }
