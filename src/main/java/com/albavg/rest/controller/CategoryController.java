@@ -57,11 +57,13 @@ public class CategoryController {
                     examples = @ExampleObject("""
                             {"id": 1, "title": "Trabajo"}
                             """)))
+
     @PostMapping
     public ResponseEntity<Category> create(@RequestBody String title) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(categoryService.save(title));
     }
+
 
     @Operation(summary = "Editar una categoría", description = "Actualiza el título de una categoría existente")
     @ApiResponse(responseCode = "200", description = "Categoría actualizada",
