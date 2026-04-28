@@ -59,6 +59,7 @@ public class TaskService {
                         .title(cmd.title())
                         .description(cmd.description())
                         .deadline(cmd.deadline())
+                        .completed(cmd.completed())
                         .author(author)
                         .category(category)
                         .tags(tags)
@@ -80,6 +81,7 @@ public class TaskService {
                     t.setTitle(cmd.title());
                     t.setDescription(cmd.description());
                     t.setDeadline(cmd.deadline());
+                    t.setCompleted(cmd.completed());
                     t.setCategory(category);
                     t.setTags(tags);
                     return taskRepository.save(t);

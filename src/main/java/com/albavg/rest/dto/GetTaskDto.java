@@ -16,6 +16,7 @@ public record GetTaskDto(
         LocalDateTime createdAt,
         LocalDateTime deadline,
         NewUserResponse author,
+        boolean completed,
         Category category,
         List<Tag> tags){
 
@@ -27,6 +28,7 @@ public record GetTaskDto(
                 t.getCreatedAt(),
                 t.getDeadline(),
                 NewUserResponse.of(t.getAuthor()),
+                t.isCompleted(),
                 t.getCategory(),
                 t.getTags()
         );

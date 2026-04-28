@@ -16,7 +16,7 @@ public class UserService {
                 .username(cmd.username())
                 .email(cmd.email())
                 .password(passwordEncoder.encode(cmd.password()))
-                .isAdmin(false)
+                .role(UserRole.USER)
                 .build();
         return userRepository.save(user);
     }

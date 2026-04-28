@@ -19,7 +19,7 @@ import java.util.List;
 public class Task {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Builder.Default
@@ -31,6 +31,9 @@ public class Task {
     private String description;
 
     private LocalDateTime deadline;
+
+    @Builder.Default
+    private boolean completed = false;
 
     @ManyToOne
     private User author;
