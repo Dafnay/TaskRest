@@ -53,11 +53,9 @@ public class TaskController {
                                              "description": "Hacer una lista de compras para el supermercado.",
                                              "createdAt": "2026-02-18T16:12:11.295172",
                                              "deadline": "2026-02-25T16:12:11.295172",
-                                             "author": {
-                                                 "id": 1,
-                                                 "username": "pepe",
-                                                 "email": "pepe@example.com"
-                                             }
+                                             "author": {"id": 1, "username": "pepe", "email": "pepe@example.com"},
+                                             "category": {"id": 1, "title": "Trabajo"},
+                                             "tags": [{"id": 1, "name": "urgente"}]
                                          },
                                          {
                                              "id": 51,
@@ -65,11 +63,9 @@ public class TaskController {
                                              "description": "Pagar la factura de electricidad antes de la fecha límite.",
                                              "createdAt": "2026-02-18T16:12:11.296628",
                                              "deadline": "2026-02-22T16:12:11.296628",
-                                             "author": {
-                                                   "id": 1,
-                                                   "username": "pepe",
-                                                   "email": "pepe@example.com"
-                                             }
+                                             "author": {"id": 1, "username": "pepe", "email": "pepe@example.com"},
+                                             "category": null,
+                                             "tags": []
                                          }
                                     ]
                                 """)
@@ -102,11 +98,9 @@ public class TaskController {
                                              "description": "Hacer una lista de compras para el supermercado.",
                                              "createdAt": "2026-02-18T16:12:11.295172",
                                              "deadline": "2026-02-25T16:12:11.295172",
-                                             "author": {
-                                                 "id": 1,
-                                                 "username": "pepe",
-                                                 "email": "pepe@example.com"
-                                             }
+                                             "author": {"id": 1, "username": "pepe", "email": "pepe@example.com"},
+                                             "category": {"id": 1, "title": "Trabajo"},
+                                             "tags": [{"id": 1, "name": "urgente"}]
                                          }
                                 """)
                         }
@@ -136,11 +130,9 @@ public class TaskController {
                                              "description": "Hacer una lista de compras para el supermercado.",
                                              "createdAt": "2026-02-18T16:12:11.295172",
                                              "deadline": "2026-02-25T16:12:11.295172",
-                                             "author": {
-                                                 "id": 1,
-                                                 "username": "pepe",
-                                                 "email": "pepe@example.com"
-                                             }
+                                             "author": {"id": 1, "username": "pepe", "email": "pepe@example.com"},
+                                             "category": {"id": 1, "title": "Trabajo"},
+                                             "tags": [{"id": 1, "name": "urgente"}]
                                          }
                                 """)
                         }
@@ -156,7 +148,9 @@ public class TaskController {
                                     {
                                          "title": "Aprender Spring Boot",
                                          "description": "Hacer todos los cursos de Spring Boot en Openwebinars.net",
-                                         "deadline": "2026-12-31T23:59:59"
+                                         "deadline": "2026-12-31T23:59:59",
+                                         "categoryId": 1,
+                                         "tagIds": [1, 2]
                                      }
                                 """)
                         )
@@ -186,11 +180,9 @@ public class TaskController {
                                              "description": "Hacer una lista de compras para el supermercado.",
                                              "createdAt": "2026-02-18T16:12:11.295172",
                                              "deadline": "2026-02-25T16:12:11.295172",
-                                             "author": {
-                                                 "id": 1,
-                                                 "username": "pepe",
-                                                 "email": "pepe@example.com"
-                                             }
+                                             "author": {"id": 1, "username": "pepe", "email": "pepe@example.com"},
+                                             "category": {"id": 1, "title": "Trabajo"},
+                                             "tags": [{"id": 1, "name": "urgente"}]
                                          }
                                 """)
                         }
@@ -209,7 +201,9 @@ public class TaskController {
                                     {
                                          "title": "Aprender Spring Boot",
                                          "description": "Hacer todos los cursos de Spring Boot en Openwebinars.net",
-                                         "deadline": "2026-12-31T23:59:59"
+                                         "deadline": "2026-12-31T23:59:59",
+                                         "categoryId": 1,
+                                         "tagIds": [1, 2]
                                      }
                                 """)
                         )
