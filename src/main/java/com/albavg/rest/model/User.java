@@ -1,4 +1,4 @@
-package com.albavg.rest.users;
+package com.albavg.rest.model;
 
 import jakarta.persistence.*;
 

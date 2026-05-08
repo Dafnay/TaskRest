@@ -1,7 +1,7 @@
 package com.albavg.rest.model;
 
 
-import com.albavg.rest.users.User;
+
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,6 @@
-package com.albavg.rest.users;
+package com.albavg.rest.dto;
+
+import com.albavg.rest.model.User;
 
 public record NewUserResponse(Long id, String username, String email, String fullname) {
 

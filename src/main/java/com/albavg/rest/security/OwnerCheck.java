@@ -1,4 +1,4 @@
-package com.albavg.rest.users;
+package com.albavg.rest.security;
 
 import com.albavg.rest.model.Task;
 import com.albavg.rest.repos.TaskRepository;

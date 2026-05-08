@@ -8,7 +8,7 @@ import com.albavg.rest.model.Task;
 import com.albavg.rest.repos.CategoryRepository;
 import com.albavg.rest.repos.TagRepository;
 import com.albavg.rest.repos.TaskRepository;
-import com.albavg.rest.users.User;
+import com.albavg.rest.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

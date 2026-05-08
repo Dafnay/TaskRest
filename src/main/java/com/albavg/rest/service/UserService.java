@@ -1,4 +1,9 @@
-package com.albavg.rest.users;
+package com.albavg.rest.service;
+
+import com.albavg.rest.dto.NewUserCommand;
+import com.albavg.rest.model.User;
+import com.albavg.rest.model.UserRole;
+import com.albavg.rest.repos.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

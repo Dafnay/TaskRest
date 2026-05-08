@@ -1,8 +1,8 @@
 package com.albavg.rest.config;
 
-import com.albavg.rest.users.User;
-import com.albavg.rest.users.UserRepository;
-import com.albavg.rest.users.UserRole;
+import com.albavg.rest.model.User;
+import com.albavg.rest.model.UserRole;
+import com.albavg.rest.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -25,6 +25,14 @@ public class DataInitializer implements ApplicationRunner {
                     .fullname("Administrador")
                     .password(passwordEncoder.encode("admin"))
                     .role(UserRole.ADMIN)
+                    .build());
+
+            userRepository.save(User.builder()
+                    .username("gestor")
+                    .email("gestor@example.com")
+                    .fullname("Gestor Principal")
+                    .password(passwordEncoder.encode("gestor"))
+                    .role(UserRole.GESTOR)
                     .build());
 
             userRepository.save(User.builder()

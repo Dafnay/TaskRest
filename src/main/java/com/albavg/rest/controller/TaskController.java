@@ -3,7 +3,7 @@ package com.albavg.rest.controller;
 import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.dto.GetTaskDto;
 import com.albavg.rest.service.TaskService;
-import com.albavg.rest.users.User;
+import com.albavg.rest.model.User;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

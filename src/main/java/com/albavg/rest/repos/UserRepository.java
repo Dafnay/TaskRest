@@ -1,4 +1,6 @@
-package com.albavg.rest.users;
+package com.albavg.rest.repos;
+
+import com.albavg.rest.model.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

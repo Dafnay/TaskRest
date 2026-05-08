@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class CategoryController {
                             {"id": 1, "title": "Trabajo"}
                             """)))
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'GESTOR')")
     @PostMapping
     public ResponseEntity<Category> create(@RequestBody String title) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -72,6 +74,7 @@ public class CategoryController {
                     examples = @ExampleObject("""
                             {"id": 1, "title": "Trabajo actualizado"}
                             """)))
+    @PreAuthorize("hasAnyRole('ADMIN', 'GESTOR')")
     @PutMapping("/{id}")
     public Category edit(@PathVariable Long id, @RequestBody String title) {
         return categoryService.edit(id, title);
@@ -80,6 +83,7 @@ public class CategoryController {
     @Operation(summary = "Eliminar una categoría", description = "Elimina una categoría según su id")
     @ApiResponse(responseCode = "204", description = "Categoría eliminada",
             content = @Content(schema = @Schema(implementation = Void.class)))
+    @PreAuthorize("hasAnyRole('ADMIN', 'GESTOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         categoryService.delete(id);

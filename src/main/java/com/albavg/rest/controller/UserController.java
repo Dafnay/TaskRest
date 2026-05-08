@@ -1,4 +1,8 @@
-package com.albavg.rest.users;
+package com.albavg.rest.controller;
+
+import com.albavg.rest.dto.NewUserCommand;
+import com.albavg.rest.dto.NewUserResponse;
+import com.albavg.rest.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

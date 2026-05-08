@@ -1,6 +1,6 @@
 package com.albavg.rest.security;
 
-import com.albavg.rest.users.UserRepository;
+import com.albavg.rest.repos.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
