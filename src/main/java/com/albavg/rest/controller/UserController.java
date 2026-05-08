@@ -4,6 +4,7 @@ import com.albavg.rest.dto.NewUserCommand;
 import com.albavg.rest.dto.NewUserResponse;
 import com.albavg.rest.service.UserService;
 
+import com.albavg.rest.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +51,12 @@ public class UserController {
     public ResponseEntity<NewUserResponse> createUser(@RequestBody NewUserCommand cmd) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(NewUserResponse.of(userService.register(cmd)));
+    }
+
+    @Operation(summary = "Obtener usuario autenticado", description = "Devuelve los datos del usuario autenticado via Basic Auth")
+    @GetMapping("/auth/me")
+    public ResponseEntity<NewUserResponse> me(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(NewUserResponse.of(user));
     }
 
 }
