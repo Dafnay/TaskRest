@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Autenticación", description = "Endpoints de autenticación y registro")
-public class UserController {
+public class AuthController {
 
     private final UserService userService;
 

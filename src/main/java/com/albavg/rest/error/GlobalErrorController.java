@@ -14,6 +14,15 @@ import java.net.URI;
 @RestControllerAdvice
 public class GlobalErrorController extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ProblemDetail handleUserAlreadyExists(UserAlreadyExistsException ex) {
+        ProblemDetail result = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        result.setTitle("Usuario ya existe");
+        result.setType(URI.create("https://www.taskapp.com/errors/user-already-exists"));
+        return result;
+    }
+
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleProductNotFound(TaskNotFoundException ex) {

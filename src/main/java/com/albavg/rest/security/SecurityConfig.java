@@ -37,8 +37,11 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers("/task/**", "/tag/**").hasAnyRole("USER", "GESTOR")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/manager/**").hasAnyRole("ADMIN", "GESTOR")
                         .anyRequest().authenticated()
                 );
 
