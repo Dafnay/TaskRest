@@ -2,9 +2,8 @@ package com.albavg.rest.service;
 
 import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.error.TaskNotFoundException;
-import com.albavg.rest.model.Category;
-import com.albavg.rest.model.Tag;
-import com.albavg.rest.model.Task;
+import com.albavg.rest.model.*;
+
 import com.albavg.rest.repos.CategoryRepository;
 import com.albavg.rest.repos.TagRepository;
 import com.albavg.rest.repos.TaskRepository;
@@ -40,6 +39,14 @@ public class TaskService {
     }
 
 
+    public List<Task> searchByTitle(User author, String title) {
+        return taskRepository.findByAuthorAndTitleContainingIgnoreCase(author, title);
+    }
+
+    public List<Task> searchByStatus(User author, TaskStatus status) {
+        return taskRepository.findByAuthorAndStatus(author, status);
+    }
+
     public Task findById(Long id){
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
@@ -59,7 +66,9 @@ public class TaskService {
                         .title(cmd.title())
                         .description(cmd.description())
                         .deadline(cmd.deadline())
-                        .completed(cmd.completed())
+                        .status(cmd.status() != null ? cmd.status() : TaskStatus.PENDING)
+                        .priority(cmd.priority())
+                        .notes(cmd.notes())
                         .author(author)
                         .category(category)
                         .tags(tags)
@@ -81,7 +90,9 @@ public class TaskService {
                     t.setTitle(cmd.title());
                     t.setDescription(cmd.description());
                     t.setDeadline(cmd.deadline());
-                    t.setCompleted(cmd.completed());
+                    if (cmd.status() != null) t.setStatus(cmd.status());
+                    t.setPriority(cmd.priority());
+                    t.setNotes(cmd.notes());
                     t.setCategory(category);
                     t.setTags(tags);
                     return taskRepository.save(t);

@@ -1,9 +1,7 @@
 package com.albavg.rest.dto;
 
 
-import com.albavg.rest.model.Category;
-import com.albavg.rest.model.Tag;
-import com.albavg.rest.model.Task;
+import com.albavg.rest.model.*;
 import com.albavg.rest.dto.NewUserResponse;
 
 import java.time.LocalDateTime;
@@ -16,7 +14,9 @@ public record GetTaskDto(
         LocalDateTime createdAt,
         LocalDateTime deadline,
         NewUserResponse author,
-        boolean completed,
+        TaskStatus status,
+        TaskPriority priority,
+        String notes,
         Category category,
         List<Tag> tags){
 
@@ -28,7 +28,9 @@ public record GetTaskDto(
                 t.getCreatedAt(),
                 t.getDeadline(),
                 NewUserResponse.of(t.getAuthor()),
-                t.isCompleted(),
+                t.getStatus(),
+                t.getPriority(),
+                t.getNotes(),
                 t.getCategory(),
                 t.getTags()
         );

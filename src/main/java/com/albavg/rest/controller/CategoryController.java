@@ -3,6 +3,7 @@ package com.albavg.rest.controller;
 import com.albavg.rest.model.Category;
 import com.albavg.rest.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -77,7 +78,7 @@ public class CategoryController {
                             """)))
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/categories/{id}")
-    public Category editAdmin(@PathVariable Long id, @RequestBody String title) {
+    public Category editAdmin(@Parameter(description = "ID de la categoría", required = true) @PathVariable Long id, @RequestBody String title) {
         return categoryService.edit(id, title);
     }
 
@@ -86,7 +87,7 @@ public class CategoryController {
             content = @Content(schema = @Schema(implementation = Void.class)))
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/categories/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAdmin(@Parameter(description = "ID de la categoría", required = true) @PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -128,7 +129,7 @@ public class CategoryController {
                             """)))
     @PreAuthorize("hasAnyRole('ADMIN', 'GESTOR')")
     @PutMapping("/manager/categories/{id}")
-    public Category editManager(@PathVariable Long id, @RequestBody String title) {
+    public Category editManager(@Parameter(description = "ID de la categoría", required = true) @PathVariable Long id, @RequestBody String title) {
         return categoryService.edit(id, title);
     }
 
@@ -137,7 +138,7 @@ public class CategoryController {
             content = @Content(schema = @Schema(implementation = Void.class)))
     @PreAuthorize("hasAnyRole('ADMIN', 'GESTOR')")
     @DeleteMapping("/manager/categories/{id}")
-    public ResponseEntity<?> deleteManager(@PathVariable Long id) {
+    public ResponseEntity<?> deleteManager(@Parameter(description = "ID de la categoría", required = true) @PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }

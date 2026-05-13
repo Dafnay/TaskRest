@@ -33,7 +33,14 @@ public class Task {
     private LocalDateTime deadline;
 
     @Builder.Default
-    private boolean completed = false;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status = TaskStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
+
+    @Lob
+    private String notes;
 
     @ManyToOne
     private User author;

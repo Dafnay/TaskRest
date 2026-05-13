@@ -3,8 +3,11 @@ package com.albavg.rest.controller;
 import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.dto.GetTaskDto;
 import com.albavg.rest.service.TaskService;
+import com.albavg.rest.model.Task;
+import com.albavg.rest.model.TaskStatus;
 import com.albavg.rest.model.User;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,6 +84,22 @@ public class TaskController {
                     .toList();
         }
 
+        @Operation(summary = "Buscar tareas", description = "Filtra por título (?title=) y/o estado (?status=PENDING|IN_PROGRESS|COMPLETED). Al menos un parámetro es obligatorio.")
+        @GetMapping("search")
+        public ResponseEntity<List<GetTaskDto>> search(
+                @Parameter(description = "Texto a buscar en el título") @RequestParam(required = false) String title,
+                @Parameter(description = "Estado de la tarea") @RequestParam(required = false) TaskStatus status,
+                @AuthenticationPrincipal User author) {
+            if (title == null && status == null)
+                return ResponseEntity.badRequest().build();
+            List<Task> result;
+            if (title != null)
+                result = taskService.searchByTitle(author, title);
+            else
+                result = taskService.searchByStatus(author, status);
+            return ResponseEntity.ok(result.stream().map(GetTaskDto::of).toList());
+        }
+
         @Operation(
                 summary = "Obtener una tarea concreta",
                 description = "Permite obtener la una tarea concreta si se le proporciona un id"
@@ -108,7 +127,7 @@ public class TaskController {
         )
         @PostAuthorize("returnObject.author.username == authentication.principal.username")
         @GetMapping("/{id}")
-        public GetTaskDto getById(@PathVariable Long id) {
+        public GetTaskDto getById(@Parameter(description = "ID de la tarea", required = true) @PathVariable Long id) {
             return GetTaskDto.of(taskService.findById(id));
 
         }
@@ -209,7 +228,7 @@ public class TaskController {
                         )
                 )
                 @RequestBody EditTaskCommand cmd,
-                @PathVariable Long id) {
+                @Parameter(description = "ID de la tarea", required = true) @PathVariable Long id) {
             return GetTaskDto.of(taskService.edit(cmd, id));
         }
 
@@ -224,7 +243,7 @@ public class TaskController {
             @ownerCheck.check(#id, authentication.principal.getId())
             """)
         @DeleteMapping("/{id}")
-        public ResponseEntity<?> delete(@PathVariable Long id) {
+        public ResponseEntity<?> delete(@Parameter(description = "ID de la tarea", required = true) @PathVariable Long id) {
             taskService.delete(id);
             return ResponseEntity.noContent().build();
         }

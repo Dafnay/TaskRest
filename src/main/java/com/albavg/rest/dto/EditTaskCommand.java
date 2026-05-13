@@ -1,5 +1,7 @@
 package com.albavg.rest.dto;
 
+import com.albavg.rest.model.TaskPriority;
+import com.albavg.rest.model.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -10,7 +12,9 @@ public record EditTaskCommand(
         String description,
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime deadline,
-        boolean completed,
+        TaskStatus status,
+        TaskPriority priority,
+        String notes,
         Long categoryId,
         List<Long> tagIds
 ) {

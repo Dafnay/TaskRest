@@ -4,6 +4,7 @@ import com.albavg.rest.dto.NewUserCommand;
 import com.albavg.rest.dto.NewUserResponse;
 import com.albavg.rest.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,32 +32,32 @@ public class AdminUserController {
 
     @Operation(summary = "Obtener un usuario por id")
     @GetMapping("/{id}")
-    public NewUserResponse getById(@PathVariable Long id) {
+    public NewUserResponse getById(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         return NewUserResponse.of(userService.findById(id));
     }
 
     @Operation(summary = "Editar un usuario")
     @PutMapping("/{id}")
-    public NewUserResponse edit(@PathVariable Long id, @RequestBody NewUserCommand cmd) {
+    public NewUserResponse edit(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id, @RequestBody NewUserCommand cmd) {
         return NewUserResponse.of(userService.editUser(id, cmd));
     }
 
     @Operation(summary = "Eliminar un usuario")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Promocionar usuario a GESTOR")
     @PatchMapping("/{id}/promote")
-    public NewUserResponse promote(@PathVariable Long id) {
+    public NewUserResponse promote(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         return NewUserResponse.of(userService.promote(id));
     }
 
     @Operation(summary = "Degradar GESTOR a USER")
     @PatchMapping("/{id}/demote")
-    public NewUserResponse demote(@PathVariable Long id) {
+    public NewUserResponse demote(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         return NewUserResponse.of(userService.demote(id));
     }
 }

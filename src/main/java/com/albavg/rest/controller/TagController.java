@@ -3,6 +3,7 @@ package com.albavg.rest.controller;
 import com.albavg.rest.model.Tag;
 import com.albavg.rest.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -45,7 +46,7 @@ public class TagController {
                             {"id": 1, "name": "urgente"}
                             """)))
     @GetMapping("/{id}")
-    public Tag getById(@PathVariable Long id) {
+    public Tag getById(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id) {
         return tagService.findById(id);
     }
 
@@ -71,7 +72,7 @@ public class TagController {
                             {"id": 1, "name": "urgente actualizado"}
                             """)))
     @PutMapping("/{id}")
-    public Tag edit(@PathVariable Long id, @RequestBody String name) {
+    public Tag edit(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id, @RequestBody String name) {
         return tagService.edit(id, name);
     }
 
@@ -79,7 +80,7 @@ public class TagController {
     @ApiResponse(responseCode = "204", description = "Etiqueta eliminada",
             content = @Content(schema = @Schema(implementation = Void.class)))
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id) {
         tagService.delete(id);
         return ResponseEntity.noContent().build();
     }
