@@ -50,13 +50,13 @@ public class AdminUserController {
     }
 
     @Operation(summary = "Promocionar usuario a GESTOR")
-    @PatchMapping("/{id}/promote")
+    @PostMapping("/{id}/promote")
     public NewUserResponse promote(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         return NewUserResponse.of(userService.promote(id));
     }
 
     @Operation(summary = "Degradar GESTOR a USER")
-    @PatchMapping("/{id}/demote")
+    @PostMapping("/{id}/demote")
     public NewUserResponse demote(@Parameter(description = "ID del usuario", required = true) @PathVariable Long id) {
         return NewUserResponse.of(userService.demote(id));
     }

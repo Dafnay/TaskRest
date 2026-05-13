@@ -84,7 +84,34 @@ public class TaskController {
                     .toList();
         }
 
-        @Operation(summary = "Buscar tareas", description = "Filtra por título (?title=) y/o estado (?status=PENDING|IN_PROGRESS|COMPLETED). Al menos un parámetro es obligatorio.")
+        @Operation(summary = "Buscar tareas por tag", description = "Devuelve las tareas del usuario que tienen el tag indicado")
+        @GetMapping("by-tag")
+        public List<GetTaskDto> getByTag(
+                @Parameter(description = "Nombre del tag") @RequestParam String tag,
+                @AuthenticationPrincipal User author) {
+            return taskService.searchByTag(author, tag)
+                    .stream().map(GetTaskDto::of).toList();
+        }
+
+        @Operation(summary = "Asignar tags a una tarea", description = "Añade los tags indicados a la tarea sin eliminar los existentes")
+        @PreAuthorize("@ownerCheck.check(#id, authentication.principal.getId())")
+        @PostMapping("/{id}/tags")
+        public GetTaskDto addTags(
+                @Parameter(description = "ID de la tarea", required = true) @PathVariable Long id,
+                @RequestBody List<Long> tagIds) {
+            return GetTaskDto.of(taskService.addTags(id, tagIds));
+        }
+
+        @Operation(summary = "Eliminar un tag de una tarea", description = "Desasocia el tag indicado de la tarea")
+        @PreAuthorize("@ownerCheck.check(#id, authentication.principal.getId())")
+        @DeleteMapping("/{id}/tags/{tagId}")
+        public GetTaskDto removeTag(
+                @Parameter(description = "ID de la tarea", required = true) @PathVariable Long id,
+                @Parameter(description = "ID del tag", required = true) @PathVariable Long tagId) {
+            return GetTaskDto.of(taskService.removeTag(id, tagId));
+        }
+
+        @Operation(summary = "Buscar tareas", description = "Filtra por título (?title=) y/o estado (?status=PENDING, IN_PROGRESS, COMPLETED). Al menos un parámetro es obligatorio.")
         @GetMapping("search")
         public ResponseEntity<List<GetTaskDto>> search(
                 @Parameter(description = "Texto a buscar en el título") @RequestParam(required = false) String title,

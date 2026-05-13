@@ -11,4 +11,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAuthor(User author);
     List<Task> findByAuthorAndTitleContainingIgnoreCase(User author, String title);
     List<Task> findByAuthorAndStatus(User author, TaskStatus status);
+    List<Task> findByAuthorAndTagsName(User author, String tagName);
 }

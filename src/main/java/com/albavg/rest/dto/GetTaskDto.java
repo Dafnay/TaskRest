@@ -1,5 +1,10 @@
 package com.albavg.rest.dto;
 
+// DTO de salida para tareas.
+// Evita serializar la entidad JPA directamente, lo que podría exponer relaciones lazy,
+// referencias circulares (Task -> User -> ...) o campos sensibles.
+// Incluye author como NewUserResponse para no exponer la contraseña del usuario.
+
 
 import com.albavg.rest.model.*;
 import com.albavg.rest.dto.NewUserResponse;

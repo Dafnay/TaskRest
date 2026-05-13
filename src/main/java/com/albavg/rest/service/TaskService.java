@@ -47,6 +47,25 @@ public class TaskService {
         return taskRepository.findByAuthorAndStatus(author, status);
     }
 
+    public List<Task> searchByTag(User author, String tagName) {
+        return taskRepository.findByAuthorAndTagsName(author, tagName);
+    }
+
+    public Task addTags(Long taskId, List<Long> tagIds) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
+        List<Tag> newTags = tagRepository.findAllById(tagIds);
+        newTags.forEach(tag -> { if (!task.getTags().contains(tag)) task.getTags().add(tag); });
+        return taskRepository.save(task);
+    }
+
+    public Task removeTag(Long taskId, Long tagId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
+        task.getTags().removeIf(t -> t.getId().equals(tagId));
+        return taskRepository.save(task);
+    }
+
     public Task findById(Long id){
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
