@@ -1,6 +1,7 @@
 package com.albavg.rest.controller;
 
 import com.albavg.rest.model.Tag;
+import com.albavg.rest.model.User;
 import com.albavg.rest.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +36,8 @@ public class TagController {
                             [{"id": 1, "name": "urgente"}, {"id": 2, "name": "pendiente"}]
                             """)))
     @GetMapping
-    public List<Tag> getAll() {
-        return tagService.findAll();
+    public List<Tag> getAll(@AuthenticationPrincipal User currentUser) {
+        return tagService.findAll(currentUser);
     }
 
     @Operation(summary = "Obtener una etiqueta por id", description = "Devuelve una etiqueta según su id")
@@ -46,8 +48,9 @@ public class TagController {
                             {"id": 1, "name": "urgente"}
                             """)))
     @GetMapping("/{id}")
-    public Tag getById(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id) {
-        return tagService.findById(id);
+    public Tag getById(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id,
+                       @AuthenticationPrincipal User currentUser) {
+        return tagService.findById(id, currentUser);
     }
 
 
@@ -59,9 +62,9 @@ public class TagController {
                             {"id": 1, "name": "urgente"}
                             """)))
     @PostMapping
-    public ResponseEntity<Tag> create(@RequestBody String name) {
+    public ResponseEntity<Tag> create(@RequestBody String name, @AuthenticationPrincipal User currentUser) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(tagService.save(name));
+                .body(tagService.save(name, currentUser));
     }
 
     @Operation(summary = "Editar una etiqueta", description = "Actualiza el nombre de una etiqueta existente")
@@ -72,16 +75,19 @@ public class TagController {
                             {"id": 1, "name": "urgente actualizado"}
                             """)))
     @PutMapping("/{id}")
-    public Tag edit(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id, @RequestBody String name) {
-        return tagService.edit(id, name);
+    public Tag edit(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id,
+                    @RequestBody String name,
+                    @AuthenticationPrincipal User currentUser) {
+        return tagService.edit(id, name, currentUser);
     }
 
     @Operation(summary = "Eliminar una etiqueta", description = "Elimina una etiqueta según su id")
     @ApiResponse(responseCode = "204", description = "Etiqueta eliminada",
             content = @Content(schema = @Schema(implementation = Void.class)))
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id) {
-        tagService.delete(id);
+    public ResponseEntity<?> delete(@Parameter(description = "ID de la etiqueta", required = true) @PathVariable Long id,
+                                    @AuthenticationPrincipal User currentUser) {
+        tagService.delete(id, currentUser);
         return ResponseEntity.noContent().build();
     }
 }

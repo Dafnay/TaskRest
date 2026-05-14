@@ -47,6 +47,10 @@ public class TaskService {
         return taskRepository.findByAuthorAndStatus(author, status);
     }
 
+    public List<Task> searchByPriority(User author, TaskPriority priority) {
+        return taskRepository.findByAuthorAndPriority(author, priority);
+    }
+
     public List<Task> searchByTag(User author, String tagName) {
         return taskRepository.findByAuthorAndTagsName(author, tagName);
     }
@@ -54,7 +58,7 @@ public class TaskService {
     public Task addTags(Long taskId, List<Long> tagIds) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException(taskId));
-        List<Tag> newTags = tagRepository.findAllById(tagIds);
+        List<Tag> newTags = tagRepository.findAllByIdInAndOwner(tagIds, task.getAuthor());
         newTags.forEach(tag -> { if (!task.getTags().contains(tag)) task.getTags().add(tag); });
         return taskRepository.save(task);
     }
@@ -77,7 +81,7 @@ public class TaskService {
                 : null;
 
         List<Tag> tags = cmd.tagIds() != null
-                ? tagRepository.findAllById(cmd.tagIds())
+                ? tagRepository.findAllByIdInAndOwner(cmd.tagIds(), author)
                 : new ArrayList<>();
 
         return taskRepository.save(
@@ -100,12 +104,11 @@ public class TaskService {
                 ? categoryRepository.findById(cmd.categoryId()).orElse(null)
                 : null;
 
-        List<Tag> tags = cmd.tagIds() != null
-                ? tagRepository.findAllById(cmd.tagIds())
-                : new ArrayList<>();
-
         return taskRepository.findById(id)
                 .map(t -> {
+                    List<Tag> tags = cmd.tagIds() != null
+                            ? tagRepository.findAllByIdInAndOwner(cmd.tagIds(), t.getAuthor())
+                            : new ArrayList<>();
                     t.setTitle(cmd.title());
                     t.setDescription(cmd.description());
                     t.setDeadline(cmd.deadline());

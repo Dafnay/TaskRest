@@ -4,6 +4,7 @@ import com.albavg.rest.dto.EditTaskCommand;
 import com.albavg.rest.dto.GetTaskDto;
 import com.albavg.rest.service.TaskService;
 import com.albavg.rest.model.Task;
+import com.albavg.rest.model.TaskPriority;
 import com.albavg.rest.model.TaskStatus;
 import com.albavg.rest.model.User;
 
@@ -111,19 +112,22 @@ public class TaskController {
             return GetTaskDto.of(taskService.removeTag(id, tagId));
         }
 
-        @Operation(summary = "Buscar tareas", description = "Filtra por título (?title=) y/o estado (?status=PENDING, IN_PROGRESS, COMPLETED). Al menos un parámetro es obligatorio.")
+        @Operation(summary = "Buscar tareas", description = "Filtra por título (?title=), estado (?status=PENDING, IN_PROGRESS, COMPLETED) y/o prioridad (?priority=LOW, MEDIUM, HIGH). Al menos un parámetro es obligatorio.")
         @GetMapping("search")
         public ResponseEntity<List<GetTaskDto>> search(
                 @Parameter(description = "Texto a buscar en el título") @RequestParam(required = false) String title,
                 @Parameter(description = "Estado de la tarea") @RequestParam(required = false) TaskStatus status,
+                @Parameter(description = "Prioridad de la tarea") @RequestParam(required = false) TaskPriority priority,
                 @AuthenticationPrincipal User author) {
-            if (title == null && status == null)
+            if (title == null && status == null && priority == null)
                 return ResponseEntity.badRequest().build();
             List<Task> result;
             if (title != null)
                 result = taskService.searchByTitle(author, title);
-            else
+            else if (status != null)
                 result = taskService.searchByStatus(author, status);
+            else
+                result = taskService.searchByPriority(author, priority);
             return ResponseEntity.ok(result.stream().map(GetTaskDto::of).toList());
         }
 

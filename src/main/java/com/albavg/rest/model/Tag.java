@@ -1,5 +1,6 @@
 package com.albavg.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,4 +16,9 @@ public class Tag {
     private Long id;
 
     private String name;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }

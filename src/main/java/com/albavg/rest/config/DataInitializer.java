@@ -53,7 +53,8 @@ public class DataInitializer implements ApplicationRunner {
                 .build());
 
         tagRepository.save(Tag.builder()
-                .name("pendiente")
+                .name("tag1")
+                .owner(user1)
                 .build());
 
         taskRepository.save(Task.builder()
