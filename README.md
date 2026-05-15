@@ -1,20 +1,48 @@
-# Desarrollo de una API REST con Spring Boot
+# Todo REST — API REST con Spring Boot
 
-Proyecto del curso de [OpenWebinars](https://openwebinars.net). API REST para la gestion de tareas (To-Do) desarrollada con Spring Boot 4 y Java 17.
+API REST para la gestión de tareas (To-Do List) desarrollada con **Spring Boot 4** y **Java 17**, con autenticación, control de acceso por roles y documentación Swagger. Forma parte de un proyecto Full Stack junto con el frontend en React ([taskrest-front](https://github.com)).
 
-## Tecnologias
+---
 
-- **Spring Boot 4.0.2**
-- **Spring Security** (Basic Auth)
-- **Spring Data JPA**
-- **H2 Database** (base de datos embebida)
-- **Lombok**
-- **Springdoc OpenAPI 3.0.1** (Swagger UI)
+## Tecnologías
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Java | 17 | Lenguaje de programación |
+| Spring Boot | 4.0.2 | Framework principal |
+| Spring Security | — | Autenticación y autorización (Basic Auth) |
+| Spring Data JPA | — | Acceso y persistencia de datos |
+| MySQL | — | Base de datos relacional |
+| Lombok | — | Reducción de código boilerplate |
+| Springdoc OpenAPI | 3.0.1 | Documentación Swagger UI |
+
+---
 
 ## Requisitos
 
 - Java 17+
 - Maven
+- MySQL en ejecución
+
+---
+
+## Configuración
+
+Crea la base de datos en MySQL:
+
+```sql
+CREATE DATABASE todo_db;
+```
+
+Configura las credenciales en `src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/todo_db
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_contraseña
+```
+
+---
 
 ## Ejecutar el proyecto
 
@@ -22,29 +50,102 @@ Proyecto del curso de [OpenWebinars](https://openwebinars.net). API REST para la
 ./mvnw spring-boot:run
 ```
 
-La aplicacion se levanta en `http://localhost:8080`.
+La aplicación se levanta en `http://localhost:8080`.
+
+Al arrancar, se crean automáticamente tres usuarios de ejemplo:
+
+| Usuario | Contraseña | Rol |
+|---|---|---|
+| admin | admin | ADMIN |
+| user1 | 12345 | USER |
+| user2 | 12345 | USER |
+
+---
+
+## Modelado de datos
+
+![Modelado de datos](docs/modelado_datos.png)
+
+---
+
+## Casos de uso
+
+![Casos de uso](docs/casos_uso.png)
+
+---
 
 ## Endpoints
 
-### Auth
+### Autenticación
 
-| Metodo | Ruta              | Descripcion               | Auth |
-|--------|--------------------|---------------------------|------|
-| POST   | `/auth/register`   | Registrar un nuevo usuario | No   |
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| POST | `/auth/register` | Público | Registrar nuevo usuario |
+| GET | `/auth/me` | Autenticado | Obtener usuario autenticado |
+| PUT | `/user/profile` | Autenticado | Modificar perfil propio |
 
 ### Tareas
 
-Todos los endpoints de tareas requieren **Basic Auth**.
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| GET | `/task/` | USER/GESTOR | Listar tareas propias |
+| GET | `/task/{id}` | USER/GESTOR | Obtener tarea por ID |
+| POST | `/task/` | USER/GESTOR | Crear tarea |
+| PUT | `/task/{id}` | USER/GESTOR | Editar tarea |
+| DELETE | `/task/{id}` | USER/GESTOR | Eliminar tarea |
+| GET | `/task/search?title=` | USER/GESTOR | Buscar por título |
+| GET | `/task/search?status=` | USER/GESTOR | Buscar por estado |
+| GET | `/task/search?priority=` | USER/GESTOR | Buscar por prioridad |
+| GET | `/task/by-tag?tag=` | USER/GESTOR | Buscar por etiqueta |
+| POST | `/task/{id}/tags` | USER/GESTOR | Asignar etiquetas a una tarea |
+| DELETE | `/task/{id}/tags/{tagId}` | USER/GESTOR | Desasociar etiqueta de una tarea |
 
-| Metodo | Ruta          | Descripcion                          |
-|--------|---------------|--------------------------------------|
-| GET    | `/task/`      | Obtener todas las tareas del usuario |
-| GET    | `/task/{id}`  | Obtener una tarea por ID             |
-| POST   | `/task/`      | Crear una nueva tarea                |
-| PUT    | `/task/{id}`  | Editar una tarea                     |
-| DELETE | `/task/{id}`  | Eliminar una tarea                   |
+### Etiquetas
 
-### Ejemplo de registro
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| GET | `/tag/` | USER/GESTOR | Listar etiquetas propias |
+| GET | `/tag/{id}` | USER/GESTOR | Obtener etiqueta por ID |
+| POST | `/tag/` | USER/GESTOR | Crear etiqueta |
+| PUT | `/tag/{id}` | USER/GESTOR | Editar etiqueta |
+| DELETE | `/tag/{id}` | USER/GESTOR | Eliminar etiqueta |
+
+### Categorías
+
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| GET | `/categories` | Autenticado | Listar categorías |
+| GET | `/manager/categories` | GESTOR/ADMIN | Listar categorías |
+| POST | `/manager/categories` | GESTOR/ADMIN | Crear categoría |
+| PUT | `/manager/categories/{id}` | GESTOR/ADMIN | Editar categoría |
+| DELETE | `/manager/categories/{id}` | GESTOR/ADMIN | Eliminar categoría |
+| GET | `/admin/categories` | ADMIN | Listar categorías |
+| POST | `/admin/categories` | ADMIN | Crear categoría |
+| PUT | `/admin/categories/{id}` | ADMIN | Editar categoría |
+| DELETE | `/admin/categories/{id}` | ADMIN | Eliminar categoría |
+
+### Usuarios (Admin)
+
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| GET | `/admin/users` | ADMIN | Listar todos los usuarios |
+| GET | `/admin/users/{id}` | ADMIN | Obtener usuario por ID |
+| PUT | `/admin/users/{id}` | ADMIN | Editar usuario |
+| DELETE | `/admin/users/{id}` | ADMIN | Eliminar usuario |
+| POST | `/admin/users/{id}/promote` | ADMIN | Promocionar USER a GESTOR |
+| POST | `/admin/users/{id}/demote` | ADMIN | Degradar GESTOR a USER |
+
+### Dashboard
+
+| Método | Ruta | Acceso | Descripción |
+|---|---|---|---|
+| GET | `/dashboard` | USER/GESTOR | Estadísticas de tareas propias |
+
+---
+
+## Ejemplos de uso
+
+### Registro de usuario
 
 ```bash
 curl -X POST http://localhost:8080/auth/register \
@@ -52,42 +153,53 @@ curl -X POST http://localhost:8080/auth/register \
   -d '{
     "username": "pepe",
     "email": "pepe@example.com",
+    "fullname": "Pepe García",
     "password": "1234"
   }'
 ```
 
-### Ejemplo de crear tarea
+### Crear tarea
 
 ```bash
 curl -X POST http://localhost:8080/task/ \
-  -u pepe:1234 \
+  -u user1:12345 \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Aprender Spring Boot",
     "description": "Hacer todos los cursos de Spring Boot en Openwebinars.net",
-    "deadline": "2026-12-31T23:59:59"
+    "deadline": "2026-12-31T23:59:59",
+    "priority": "HIGH",
+    "categoryId": 1,
+    "tagIds": [1]
   }'
 ```
 
+---
+
 ## Seguridad
 
-- Los endpoints de tareas estan protegidos con **HTTP Basic Auth**.
-- Cada usuario solo puede ver, editar y eliminar sus propias tareas (`@PreAuthorize` / `@PostAuthorize`).
+- Todos los endpoints están protegidos con **HTTP Basic Auth** salvo `/auth/register`.
+- El acceso se controla por roles: `USER`, `GESTOR` y `ADMIN`.
+- Cada usuario solo puede ver y gestionar sus propios recursos.
+- Las contraseñas se almacenan cifradas con **BCrypt**.
 
-## Documentacion API (Swagger)
+---
 
-Con la aplicacion en ejecucion, accede a:
+## Documentación API (Swagger)
 
-- **Swagger UI:** http://localhost:8080/swagger-ui.html
-- **OpenAPI JSON:** http://localhost:8080/v3/api-docs
+Con la aplicación en ejecución, accede a:
+
+- **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
+- **OpenAPI JSON:** `http://localhost:8080/v3/api-docs`
 
 ![Swagger UI](docs/swagger.png)
 
-## Base de datos
+---
 
-Utiliza **H2** como base de datos embebida. La consola H2 esta disponible en:
+## Despliegue con Docker
 
-- http://localhost:8080/h2-console
-- JDBC URL: `jdbc:h2:./db/database`
-- Usuario: `sa`
-- Password: _(vacio)_
+El proyecto está preparado para desplegarse con Docker Compose junto al frontend y la base de datos en un servidor VPS de **IONOS**.
+
+```bash
+docker-compose up -d
+```
